@@ -33,7 +33,7 @@ $cs = $csic->get_this_all($sql);
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Central de Reservas</title>
+    <title>Central de Reservas.</title>
 
     <!-- Favicons -->
     <link href="template_sitio/img/favicon.png" rel="icon">
