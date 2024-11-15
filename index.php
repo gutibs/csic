@@ -27,11 +27,15 @@ foreach ($ci as $v) {
         $carro[] = $v->imagen5;
     }
 }
+if($carro) {
+    shuffle($carro);
 
-shuffle($carro);
+
 $carro = array_slice($carro, 0, 10);
 $randomKey = array_rand($carro);
 $randomValue = $carro[$randomKey];
+}
+
 
 $sql = "SELECT id, nombre_sala as nombre FROM salas WHERE 1 ORDER BY nombre_sala";
 $cs = $csic->get_this_all($sql);
@@ -271,52 +275,63 @@ $cs = $csic->get_this_all($sql);
     <section id="ingreso" class="contact section">
 
 
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-            <span class="description-title">Ingresar</span>
-            <h2>Ingresar</h2>
-            <p>Si ya tiene un usuario creado.</p>
-        </div><!-- End Section Title -->
 
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div class="row">
+                <div class="col-3">
+                    &nbsp;
+                </div>
+                <div class="col-6 ">
+                    <!-- Section Title -->
+                    <div class="container section-title" data-aos="fade-up">
+                        <span class="description-title">Ingresar</span>
+                        <h2>Ingresar</h2>
+                        <p>Si ya tiene un usuario creado.</p>
+                        <p>Ó haz click <a href="registro.php">Aquí</a> para generar un usuario </p>
+                    </div><!-- End Section Title -->
+                    <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-            <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
-                <form id="loginForm" action="login.php" method="POST">
-                    <!-- CSRF Token -->
-                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                    <div class="mb-3 text-start form-group" id="email-group">
-                        <label class="form-label" for="email">Correo Electrónico</label>
-                        <div class="form-icon-container">
-                            <input class="form-control form-icon-input" id="email" name="email" type="email"
-                                   placeholder="nombre@ejemplo.com" required/>
-                            <span class="fas fa-user text-body fs-9 form-icon"></span>
+                        <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
+                            <form id="loginForm" action="login.php" method="POST">
+                                <!-- CSRF Token -->
+                                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                <div class="mb-3 text-start form-group" id="email-group">
+                                    <label class="form-label" for="email">Correo Electrónico</label>
+                                    <div class="form-icon-container">
+                                        <input class="form-control form-icon-input" id="email" name="email" type="email"
+                                               placeholder="nombre@ejemplo.com" required/>
+                                        <span class="fas fa-user text-body fs-9 form-icon"></span>
+                                    </div>
+                                    <span class="error-message text-danger" id="email-error"></span>
+                                </div>
+
+                                <div class="mb-3 text-start form-group" id="password-group">
+                                    <label class="form-label" for="password">Clave</label>
+                                    <div class="form-icon-container position-relative" data-password="data-password">
+                                        <input class="form-control form-icon-input pe-6" id="password" name="password"
+                                               type="password" placeholder="Clave" data-password-input="data-password-input"
+                                               required/>
+                                        <span class="fas fa-key text-body fs-9 form-icon"></span>
+                                        <button type="button"
+                                                class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
+                                                data-password-toggle="data-password-toggle">
+                                            <span class="uil uil-eye show"></span>
+                                            <span class="uil uil-eye-slash hide"></span>
+                                        </button>
+                                    </div>
+                                    <span class="error-message text-danger" id="password-error"></span>
+                                </div>
+
+
+                                <button type="submit" class="btn btn-primary w-100 mb-3" id="btn_ingreso">Ingresar</button>
+                            </form>
                         </div>
-                        <span class="error-message text-danger" id="email-error"></span>
                     </div>
-
-                    <div class="mb-3 text-start form-group" id="password-group">
-                        <label class="form-label" for="password">Clave</label>
-                        <div class="form-icon-container position-relative" data-password="data-password">
-                            <input class="form-control form-icon-input pe-6" id="password" name="password"
-                                   type="password" placeholder="Clave" data-password-input="data-password-input"
-                                   required/>
-                            <span class="fas fa-key text-body fs-9 form-icon"></span>
-                            <button type="button"
-                                    class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
-                                    data-password-toggle="data-password-toggle">
-                                <span class="uil uil-eye show"></span>
-                                <span class="uil uil-eye-slash hide"></span>
-                            </button>
-                        </div>
-                        <span class="error-message text-danger" id="password-error"></span>
-                    </div>
-
-
-                    <button type="submit" class="btn btn-primary w-100 mb-3" id="btn_ingreso">Ingresar</button>
-                </form>
+                    <div class="mt-5" style="height:75px">&nbsp;</div>
+                </div>
             </div>
-        </div>
-        <div class="mt-5" style="height:75px">&nbsp;</div>
+
+
+
 
     </section><!-- /Portfolio Section -->
 

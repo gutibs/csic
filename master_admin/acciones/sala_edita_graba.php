@@ -28,6 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $incidencia = filter_input(INPUT_POST, 'incidencia', FILTER_SANITIZE_STRING);
     $tipo_incidencia = filter_input(INPUT_POST, 'tipo_incidencia', FILTER_SANITIZE_STRING);
     $edificio_id = filter_input(INPUT_POST, 'edificio_id', FILTER_VALIDATE_INT);
+    $anillo_magnetico = filter_input(INPUT_POST, 'anillo_magnetico', FILTER_VALIDATE_INT);
 
     $stmt = $db->prepare("
         UPDATE salas SET
@@ -39,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             videoconferencia = :videoconferencia,
             television = :television,
             proyector = :proyector,
+            anillo_magnetico = :anillo_magnetico,
             catering = :catering,
             incidencia = :incidencia,
             tipo_incidencia = :tipo_incidencia,
@@ -60,6 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bindParam(':tipo_incidencia', $tipo_incidencia, PDO::PARAM_STR);
     $stmt->bindParam(':edificio_id', $edificio_id, PDO::PARAM_INT);
     $stmt->bindParam(':id', $sala_id, PDO::PARAM_INT);
+    $stmt->bindParam(':anillo_magnetico', $anillo_magnetico, PDO::PARAM_INT);
+
+
     $stmt->execute();
 
 

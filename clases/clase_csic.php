@@ -302,7 +302,7 @@ class Csic
 
     public function traer_edificios()
     {
-        $sql = "SELECT * FROM edificio WHERE 1";
+        $sql = "SELECT a.*, b.nombre as unidad_nombre FROM edificio a JOIN unidades b ON a.unidad = b.id WHERE 1";
         return self::get_this_all($sql);
     }
 
@@ -467,6 +467,30 @@ class Csic
         } else {
             return false;
         }
+    }
+
+    public function traer_departamentos_csic()
+    {
+        $sql = "SELECT * FROM departamentos_csic WHERE 1 ORDER by nombre";
+        return self::get_this_all($sql);
+    }
+
+    public function traer_unidades_csic()
+    {
+        $sql = "SELECT * FROM unidades_csic WHERE 1 ORDER by nombre";
+        return self::get_this_all($sql);
+    }
+
+    public function traer_servicios_csic()
+    {
+        $sql = "SELECT * FROM servicios_csic WHERE 1 ORDER by nombre";
+        return self::get_this_all($sql);
+    }
+
+    public function traer_secciones_csic()
+    {
+        $sql = "SELECT * FROM secciones_csic WHERE 1 ORDER by nombre";
+        return self::get_this_all($sql);
     }
 }
 

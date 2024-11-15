@@ -10,6 +10,7 @@ $sal = $csic->get_this_all($sql);
 $unidades = $csic->traer_unidades();
 $edificios = $csic->traer_edificios();
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr" data-navigation-type="default" data-navbar-horizontal-shape="default">
@@ -18,6 +19,13 @@ $edificios = $csic->traer_edificios();
     <?php
     include("header.php");
     ?>
+
+    <style>
+        .custom-scroll {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
 <main class="main" id="top">
@@ -38,14 +46,16 @@ $edificios = $csic->traer_edificios();
                 ?>
             </div>
                 <div class="col mt-5">
-                    <div class="card border h-100 w-100 overflow-hidden">
-                        <div class="card-body px-5 position-relative">
+                    <div class="card border h-100 w-100 ">
+                        <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center mb-5">
                                 <span><h3 class="mb-0">Salas</h3><small>Click para editar</small></span>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_nueva_unidad">Crear Nueva Sala</button>
                             </div>
-                            <?php
+                        </div>
+                        <div class="card-body px-5 position-relative  custom-scroll">
 
+                            <?php
                             foreach($sal as $v){
                                 echo '<p class="text-body-tertiary fw-semibold btn_edita_sala" style="cursor:pointer" data-id="'.$v->id.'" >'.$v->nombre_sala.'</p>';
                             }
@@ -67,9 +77,7 @@ $edificios = $csic->traer_edificios();
                                 <button class="btn btn-close p-1" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
                             <div class="modal-body">
-                                <form enctype="multipart/form-data">
-                                    <!-- Hidden ID -->
-                                    <input type="hidden" name="id" value="1">
+                                <form enctype="multipart/form-data" method="post">
 
                                     <!-- Unidad -->
                                     <div class="mb-3">
@@ -88,19 +96,19 @@ $edificios = $csic->traer_edificios();
                                     <!-- Nombre de la Sala -->
                                     <div class="mb-3">
                                         <label for="nombre_sala" class="form-label">Nombre de la Sala</label>
-                                        <input type="text" class="form-control" id="nombre_sala" name="nombre_sala" value="Sala Polivalente">
+                                        <input type="text" class="form-control" id="nombre_sala" name="nombre_sala" value="">
                                     </div>
 
                                     <!-- Número de Sala -->
                                     <div class="mb-3">
                                         <label for="numero_sala" class="form-label">Número de Sala</label>
-                                        <input type="text" class="form-control" id="numero_sala" name="numero_sala" value="6121">
+                                        <input type="text" class="form-control" id="numero_sala" name="numero_sala" value="">
                                     </div>
 
                                     <!-- Capacidad -->
                                     <div class="mb-3">
                                         <label for="capacidad" class="form-label">Capacidad</label>
-                                        <input type="number" class="form-control" id="capacidad" name="capacidad" value="123">
+                                        <input type="number" class="form-control" id="capacidad" name="capacidad" value="">
                                     </div>
 
                                     <!-- Equipamiento -->
@@ -125,6 +133,10 @@ $edificios = $csic->traer_edificios();
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="catering" name="catering" value="1" checked>
                                             <label class="form-check-label" for="catering">Catering</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="anillo_magnetico" name="anillo_magnetico" value="1" checked>
+                                            <label class="form-check-label" for="anillo_magnetico">Anillo magnetico</label>
                                         </div>
                                     </fieldset>
 
@@ -184,7 +196,7 @@ $edificios = $csic->traer_edificios();
                                             <?php
                                             foreach($edificios as $edificio){
 
-                                                echo "<option value='{$edificio->id}'>{$edificio->nombre}</option>";
+                                                echo "<option value='{$edificio->id}'>{$edificio->nombre} ({$edificio->unidad_nombre})</option>";
                                             }
                                             ?>
                                         </select>

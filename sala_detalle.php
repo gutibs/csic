@@ -56,7 +56,7 @@ $cs = $of->get_this_all($sql);
 
         <nav id="navmenu" class="navmenu">
             <ul>
-                <li><a href="dashboard.php">Inicio</a></li>
+                <li><a href="index.php">Inicio</a></li>
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -131,6 +131,7 @@ $cs = $of->get_this_all($sql);
                             <li><strong>Television</strong>: <?php echo ($sala->television === 1) ?  "Si" : "No"; ?></li>
                             <li><strong>Proyector</strong>: <?php echo ($sala->proyector === 1) ?  "Si" : "No"; ?></li>
                             <li><strong>Catering</strong>: <?php echo ($sala->catering === 1) ?  "Si" : "No"; ?></li>
+                            <li><strong>Anillo Magnético</strong>: <?php echo ($sala->anillo_magnetico === 1) ?  "Si" : "No"; ?></li>
                         </ul>
                     </div>
                     <div class="portfolio-description" data-aos="fade-up" data-aos-delay="300">

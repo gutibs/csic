@@ -13,15 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['
     if (empty($_POST['nombre_sala'])) {
         $errors[] = "Nombre de la Sala is required.";
     }
-    if (empty($_POST['numero_sala'])) {
-        $errors[] = "Número de Sala is required.";
-    }
-    if (empty($_POST['capacidad'])) {
-        $errors[] = "Capacidad is required.";
-    }
-    if (empty($_POST['edificio_id'])) {
-        $errors[] = "Edificio is required.";
-    }
+
 
     // If there are errors, display them and exit
     if (!empty($errors)) {
@@ -36,7 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['
     $nombre_sala = $_POST['nombre_sala'];
     $numero_sala = $_POST['numero_sala'];
     $capacidad = $_POST['capacidad'];
+
+    $capacidad = ($capacidad === "") ? 0 : $capacidad;
+
+
     $edificio_id = $_POST['edificio_id'];
+    $anillo_magnetico = $_POST['anillo_magnetico'];
     $equipamiento = [
         'ordenador' => isset($_POST['ordenador']) ? 1 : 0,
         'videoconferencia' => isset($_POST['videoconferencia']) ? 1 : 0,
@@ -50,11 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['
     // Prepare and execute insert query
     $sql = "INSERT INTO salas (
                 unidad_id, nombre_sala, numero_sala, capacidad, 
-                ordenador, videoconferencia, television, proyector, catering, 
+                ordenador, videoconferencia, television, proyector, catering, anillo_magnetico,
                 edificio_id
             ) VALUES (
                 :unidad_id, :nombre_sala, :numero_sala, :capacidad, 
-                :ordenador, :videoconferencia, :television, :proyector, :catering, 
+                :ordenador, :videoconferencia, :television, :proyector, :catering, :anillo_magnetico, 
                 :edificio_id
             )";
 
@@ -66,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['
     $stmt->bindParam(':numero_sala', $numero_sala);
     $stmt->bindParam(':capacidad', $capacidad);
     $stmt->bindParam(':edificio_id', $edificio_id);
+    $stmt->bindParam(':anillo_magnetico', $anillo_magnetico  );
+
     foreach ($equipamiento as $key => $value) {
         $stmt->bindValue(":$key", $value);
     }

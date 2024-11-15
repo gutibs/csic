@@ -94,7 +94,7 @@ $edificios = $csic->traer_edificios();
                                     <!-- Ordenador -->
                                     <div class="col-4 mb-3">
                                         <label class="form-label" for="ordenador">Ordenador</label>
-                                        <select class="form-control" id="ordenador" name="ordenador">
+                                        <select class="form-select" id="ordenador" name="ordenador">
                                             <option value="1" <?= $sala->ordenador == 1 ? 'selected' : '' ?>>Sí</option>
                                             <option value="0" <?= $sala->ordenador == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
@@ -103,7 +103,7 @@ $edificios = $csic->traer_edificios();
                                     <!-- Videoconferencia -->
                                     <div class="col-4 mb-3">
                                         <label class="form-label" for="videoconferencia">Videoconferencia</label>
-                                        <select class="form-control" id="videoconferencia" name="videoconferencia">
+                                        <select class="form-select" id="videoconferencia" name="videoconferencia">
                                             <option value="1" <?= $sala->videoconferencia == 1 ? 'selected' : '' ?>>Sí
                                             </option>
                                             <option value="0" <?= $sala->videoconferencia == 0 ? 'selected' : '' ?>>No
@@ -114,7 +114,7 @@ $edificios = $csic->traer_edificios();
                                     <!-- Television -->
                                     <div class="col-4 mb-3">
                                         <label class="form-label" for="television">Televisión</label>
-                                        <select class="form-control" id="television" name="television">
+                                        <select class="form-select" id="television" name="television">
                                             <option value="1" <?= $sala->television == 1 ? 'selected' : '' ?>>Sí
                                             </option>
                                             <option value="0" <?= $sala->television == 0 ? 'selected' : '' ?>>No
@@ -125,7 +125,7 @@ $edificios = $csic->traer_edificios();
                                     <!-- Proyector -->
                                     <div class="col-4 mb-3">
                                         <label class="form-label" for="proyector">Proyector</label>
-                                        <select class="form-control" id="proyector" name="proyector">
+                                        <select class="form-select" id="proyector" name="proyector">
                                             <option value="1" <?= $sala->proyector == 1 ? 'selected' : '' ?>>Sí</option>
                                             <option value="0" <?= $sala->proyector == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
@@ -134,11 +134,22 @@ $edificios = $csic->traer_edificios();
                                     <!-- Catering -->
                                     <div class="col-4 mb-3">
                                         <label class="form-label" for="catering">Catering</label>
-                                        <select class="form-control" id="catering" name="catering">
+                                        <select class="form-select" id="catering" name="catering">
                                             <option value="1" <?= $sala->catering == 1 ? 'selected' : '' ?>>Sí</option>
                                             <option value="0" <?= $sala->catering == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
+
+                                    <div class="col-4 mb-3">
+                                        <label class="form-label" for="anillo_magnetico">Anillo magnetico</label>
+                                        <select class="form-select" id="anillo_magnetico" name="anillo_magnetico">
+                                            <option value="1" <?= $sala->anillo_magnetico == 1 ? 'selected' : '' ?>>Sí
+                                            </option>
+                                            <option value="0" <?= $sala->anillo_magnetico == 0 ? 'selected' : '' ?>>No
+                                            </option>
+                                        </select>
+                                    </div>
+
 
                                     <!-- Incidencia -->
                                     <div class="col-4 mb-3">
