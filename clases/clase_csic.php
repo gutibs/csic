@@ -22,6 +22,7 @@ class Csic
     private $rol;
     private $token;
     private $sala_id;
+    private $gestion;
 
     public function __construct($data = array())
     {
@@ -491,6 +492,45 @@ class Csic
     {
         $sql = "SELECT * FROM secciones_csic WHERE 1 ORDER by nombre";
         return self::get_this_all($sql);
+    }
+
+    public function activar_reservante()
+    {
+        $pdo = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8"));
+        $stmt = $pdo->prepare("SELECT id FROM reservantes WHERE activation_token = :gestion");
+        $stmt->bindParam(":gestion", $this->gestion);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_OBJ);
+        if ($user) {
+            return $user->id;
+        } else {
+            return false;
+        }
+    }
+
+    public function login_reservante()
+    {
+        try {
+            // Connect to the database
+            $con = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8"));
+            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $con->prepare("SELECT * FROM reservantes WHERE email = :email AND activo = 1");
+            $stmt->bindParam(":email", $this->email);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_OBJ);
+            if ($row && password_verify($this->password, $row->password)) {
+                $_SESSION["logueado"] = 1;
+                $_SESSION["id"] = $row->id;
+                $_SESSION["nombre"] = $row->nombre;
+                $_SESSION["email"] = $row->email;
+                return 1;
+            } else {
+                return 0;
+            }
+        } catch (PDOException $e) {
+            //die("Database error: " . $e->getMessage());
+            return 0;
+        }
     }
 }
 

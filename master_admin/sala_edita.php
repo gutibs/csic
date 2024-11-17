@@ -141,7 +141,7 @@ $edificios = $csic->traer_edificios();
                                     </div>
 
                                     <div class="col-4 mb-3">
-                                        <label class="form-label" for="anillo_magnetico">Anillo magnetico</label>
+                                        <label class="form-label" for="anillo_magnetico">Campo magnetico</label>
                                         <select class="form-select" id="anillo_magnetico" name="anillo_magnetico">
                                             <option value="1" <?= $sala->anillo_magnetico == 1 ? 'selected' : '' ?>>Sí
                                             </option>

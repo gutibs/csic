@@ -4,20 +4,6 @@ include("config/config.php");
 include("clases/clase_csic.php");
 $of = new Csic();
 
-
-
-/*
- Array
-(
-    [csrf_token] => 135863509fca7516e2917e21c2501199bd6beed4b99b060d55b9fbc1a7a6b051
-    [reservante_completo] =>
-    [email] => gutibs@gmail.com
-    [password] => putaMierda2024!
-)
-
- */
-
-
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,19 +20,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (empty($_POST['password'])) {
         $errors['password'] = "Clave es requerida.";
+    } elseif (strlen($_POST['password']) < 8) {
+        $errors['password'] = "La clave debe tener al menos 8 caracteres.";
     } else {
         $password = $_POST['password'];
     }
-
-    if (!empty($_POST['reservante_completo'])) {
-        $errors['honey'] = "Gracias.";
-    }
-
     if (empty($errors)) {
         $of->storeFormValues($_POST);
-        $usuario = $of->login_reservante();
+        $usuario = $of->login_usuario();
+
+
         if($usuario === 1) {
-            header("Location: index.php");
+            switch ((int)$_SESSION["rol"]) {
+                case 1:
+                    header("Location: master_admin/dashboard.php"); // Redirect to a protected page (e.g., dashboard)
+                    exit;
+                case 2:
+                    header("Location: administrador/dashboard.php"); // Redirect for role 2
+                    exit;
+                case 3:
+                    header("Location: guest_dashboard.php"); // Redirect for role 3
+                    exit;
+                default:
+                    header("Location: error.php"); // Redirect for undefined roles
+                    exit;
+            }
         } else {
             $_SESSION['login_errors'] = "Algun error";
             header("Location: index.php#ingreso");

@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -29,14 +30,10 @@ foreach ($ci as $v) {
 }
 if($carro) {
     shuffle($carro);
-
-
 $carro = array_slice($carro, 0, 10);
 $randomKey = array_rand($carro);
 $randomValue = $carro[$randomKey];
 }
-
-
 $sql = "SELECT id, nombre_sala as nombre FROM salas WHERE 1 ORDER BY nombre_sala";
 $cs = $csic->get_this_all($sql);
 
@@ -50,8 +47,10 @@ $cs = $csic->get_this_all($sql);
     <title>Central de Reservas.</title>
 
     <!-- Favicons -->
-    <link href="template_sitio/img/favicon.png" rel="icon">
-    <link href="template_sitio/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="static/imagenes/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/imagenes/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/imagenes/favicon/favicon-16x16.png">
+    <link rel="manifest" href="static/imagenes/favicon/site.webmanifest">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -112,8 +111,21 @@ $cs = $csic->get_this_all($sql);
             <ul>
                 <li><a href="#hero" class="active">Inicio</a></li>
                 <li><a href="#portfolio">Salas</a></li>
-                <li><a href="#ingreso">Solicitud</a></li>
-                <li><a href="#contacto">Contacto</a></li>
+                <?php
+                if(isset($_SESSION['logueado']) && $_SESSION['logueado'] === 1){
+                    echo '<li><a href="#contacto">Contacto</a></li>';
+                    echo '<li><a href="usuario/index.php">Mis Gestiones</a></li>';
+                } else {
+                    echo '<li><a href="#ingreso">Ingreso</a></li>';
+                    echo '<li><a href="#contacto">Contacto</a></li>';
+                }
+                ?>
+
+                <?php
+                if(isset($_SESSION['logueado']) && $_SESSION['logueado'] === 1){
+                echo '<li><a href="logout.php">Salir</a></li>';
+                }
+                ?>
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -271,11 +283,14 @@ $cs = $csic->get_this_all($sql);
     </section><!-- /Portfolio Section -->
 
 
+    <?php
+    if(!isset($_SESSION['logueado']) || $_SESSION['logueado'] !== 1){
+        ?>
+
+
+
     <!-- Ingreso Section -->
-    <section id="ingreso" class="contact section">
-
-
-
+    <section id="ingreso" class="ingreso section">
             <div class="row">
                 <div class="col-3">
                     &nbsp;
@@ -294,6 +309,7 @@ $cs = $csic->get_this_all($sql);
                             <form id="loginForm" action="login.php" method="POST">
                                 <!-- CSRF Token -->
                                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                <input type="text" name="reservante_completo" style="display:none;" tabindex="-1">
                                 <div class="mb-3 text-start form-group" id="email-group">
                                     <label class="form-label" for="email">Correo Electrónico</label>
                                     <div class="form-icon-container">
@@ -333,7 +349,12 @@ $cs = $csic->get_this_all($sql);
 
 
 
-    </section><!-- /Portfolio Section -->
+    </section><!-- /ingreso Section -->
+
+
+        <?php
+    }
+    ?>
 
 
     <!-- Contact Section -->
@@ -352,6 +373,7 @@ $cs = $csic->get_this_all($sql);
             <form action="contacto/solicitud.php" method="post" class="php-email-form" data-aos="fade-up"
                   data-aos-delay="300">
                 <input type="hidden" name="csrf" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="text" name="usuario_completo" style="display:none;" tabindex="-1">
                 <input type="text" name="nombre_completo" style="display: none;">
                 <div class="row gy-4 mt-2">
                     <div class="col-md-6">

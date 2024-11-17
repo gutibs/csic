@@ -1,23 +1,31 @@
 <?php
 session_start();
-include("config/config.php");
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Load Composer's autoloader
+require 'config/config.php';
+require 'vendor/autoload.php';
 include("clases/clase_csic.php");
 $csic = new Csic();
 
-
-
-
-
-// Initialize an array to store error messages
+echo "<pre>";
+print_r($_POST);
+print_r($_SESSION['csrf_token']);
+var_dump($_POST['usuario_csic']);
 $errors = array();
 
 // Check if the form is submitted via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    // Validate CSRF Token
-    if (empty($_POST['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-        $errors[] = 'Solicitud inválida. Por favor, intente nuevamente.';
+    // saco la validacion del csrf por ahora
+  //  if (empty($_POST['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+  //      $errors[] = 'Solicitud inválida. Por favor, intente nuevamente.';
+
+    if( 2 === 1){
+
     } else {
+        echo "aca";
         // Unset the CSRF token to prevent reuse
         unset($_SESSION['csrf_token']);
 
@@ -63,20 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Add phone number format validation if necessary
         }
 
-        // Validate 'password' and 'password2'
-        if (empty($_POST['password']) || empty($_POST['password2'])) {
-            $errors[] = 'Ambos campos de contraseña son requeridos.';
-        } else {
-            $password = $_POST['password'];
-            $password2 = $_POST['password2'];
 
-            if ($password !== $password2) {
-                $errors[] = 'Las contraseñas no coinciden.';
-            } elseif (strlen($password) < 6) {
-                $errors[] = 'La contraseña debe tener al menos 6 caracteres.';
-            }
-            // No need to sanitize passwords as they will be hashed
-        }
 
         // Validate 'usuario_csic'
         if (!isset($_POST['usuario_csic'])) {
@@ -94,66 +89,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // If 'usuario_csic' is '1', validate additional fields
         if ($usuario_csic === '1') {
             // Sanitize and validate 'departamento'
-            if (empty($_POST['departamento'])) {
+            if ($_POST['usuario_csic'] === 0 && empty($_POST['departamento'])) {
                 $errors[] = 'El departamento es requerido.';
             } else {
                 $departamento = filter_input(INPUT_POST, 'departamento', FILTER_SANITIZE_STRING);
             }
 
             // Sanitize and validate 'unidad'
-            if (empty($_POST['unidad'])) {
+            if ($_POST['usuario_csic'] === 0 && empty($_POST['unidad'])) {
                 $errors[] = 'La unidad es requerida.';
             } else {
                 $unidad = filter_input(INPUT_POST, 'unidad', FILTER_SANITIZE_STRING);
             }
 
             // Sanitize and validate 'servicio'
-            if (empty($_POST['servicio'])) {
+            if ($_POST['usuario_csic'] === 0 && empty($_POST['servicio'])) {
                 $errors[] = 'El servicio es requerido.';
             } else {
                 $servicio = filter_input(INPUT_POST, 'servicio', FILTER_SANITIZE_STRING);
             }
 
             // Sanitize and validate 'seccion'
-            if (empty($_POST['seccion'])) {
+            if ($_POST['usuario_csic'] === 0 && empty($_POST['seccion'])) {
                 $errors[] = 'La sección es requerida.';
             } else {
                 $seccion = filter_input(INPUT_POST, 'seccion', FILTER_SANITIZE_STRING);
             }
 
             // Sanitize 'direccion_edificio'
-            if (empty($_POST['direccion_edificio'])) {
+            if ($_POST['usuario_csic'] === 0 && empty($_POST['direccion_edificio'])) {
                 $errors[] = 'La dirección del edificio es requerida.';
             } else {
                 $direccion_edificio = filter_input(INPUT_POST, 'direccion_edificio', FILTER_SANITIZE_STRING);
             }
 
             // Sanitize 'planta'
-            if (empty($_POST['planta'])) {
+            if ($_POST['usuario_csic'] === 0 && empty($_POST['planta'])) {
                 $errors[] = 'La planta es requerida.';
             } else {
                 $planta = filter_input(INPUT_POST, 'planta', FILTER_SANITIZE_STRING);
             }
 
             // Sanitize 'numero_despacho'
-            if (empty($_POST['numero_despacho'])) {
+            if ($_POST['usuario_csic'] === 0 && empty($_POST['numero_despacho'])) {
                 $errors[] = 'El número del despacho es requerido.';
             } else {
                 $numero_despacho = filter_input(INPUT_POST, 'numero_despacho', FILTER_SANITIZE_STRING);
             }
 
             // Sanitize and validate 'codigo_postal_trabajo'
-            if (empty($_POST['codigo_postal_trabajo'])) {
+            if ($_POST['usuario_csic'] === 0 && empty($_POST['codigo_postal_trabajo'])) {
                 $errors[] = 'El código postal es requerido.';
             } else {
                 $codigo_postal_trabajo = filter_input(INPUT_POST, 'codigo_postal_trabajo', FILTER_SANITIZE_STRING);
-                if (!preg_match('/^\d{5}$/', $codigo_postal_trabajo)) {
-                    $errors[] = 'El código postal debe tener 5 dígitos.';
+                if (!preg_match('/^\d{4,5}$/', $codigo_postal_trabajo)) {
+                    $errors[] = 'El código postal debe tener entre 4 y 5 dígitos.';
                 }
+
             }
 
             // Sanitize 'telefono_fijo'
-            if (empty($_POST['telefono_fijo'])) {
+            if ($_POST['usuario_csic'] === 0 && empty($_POST['telefono_fijo'])) {
                 $errors[] = 'El teléfono fijo es requerido.';
             } else {
                 $telefono_fijo = filter_input(INPUT_POST, 'telefono_fijo', FILTER_SANITIZE_STRING);
@@ -163,24 +159,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // If there are no errors, proceed to process the data
         if (empty($errors)) {
-            // Hash the password securely
-            $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
             try {
                 // Establish database connection (replace with your own credentials)
                 $pdo = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8"));
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                // Prepare the SQL statement
-                $stmt = $pdo->prepare('INSERT INTO reservantes (nombre, apellidos, dni, email, celular, password, usuario_csic, departamento, unidad, servicio, seccion, direccion_edificio, planta, numero_despacho, codigo_postal_trabajo, telefono_fijo, activo) VALUES (:nombre, :apellidos, :dni, :email, :celular, :password, :usuario_csic, :departamento, :unidad, :servicio, :seccion, :direccion_edificio, :planta, :numero_despacho, :codigo_postal_trabajo, :telefono_fijo, :activo)');
+                // Generate a unique activation token
+                $activation_token = bin2hex(random_bytes(16));
 
-                // Bind parameters
+                // Prepare the SQL statement (add the activation_token column if necessary)
+                $stmt = $pdo->prepare('INSERT INTO reservantes (nombre, apellidos, dni, email, celular, usuario_csic, departamento, unidad, servicio, seccion, direccion_edificio, planta, numero_despacho, codigo_postal_trabajo, telefono_fijo, activo, activation_token) VALUES (:nombre, :apellidos, :dni, :email, :celular, :usuario_csic, :departamento, :unidad, :servicio, :seccion, :direccion_edificio, :planta, :numero_despacho, :codigo_postal_trabajo, :telefono_fijo, :activo, :activation_token)');
+
                 $stmt->bindParam(':nombre', $nombre);
                 $stmt->bindParam(':apellidos', $apellidos);
                 $stmt->bindParam(':dni', $dni);
                 $stmt->bindParam(':email', $email);
                 $stmt->bindParam(':celular', $celular);
-                $stmt->bindParam(':password', $password_hash);
                 $stmt->bindParam(':usuario_csic', $usuario_csic, PDO::PARAM_BOOL);
                 $stmt->bindParam(':departamento', $departamento);
                 $stmt->bindParam(':unidad', $unidad);
@@ -192,22 +186,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->bindParam(':codigo_postal_trabajo', $codigo_postal_trabajo);
                 $stmt->bindParam(':telefono_fijo', $telefono_fijo);
                 $stmt->bindValue(':activo', false, PDO::PARAM_BOOL); // Default to false
+                $stmt->bindParam(':activation_token', $activation_token);
 
                 // Execute the statement
                 $stmt->execute();
 
-                // Registration successful
-                echo 'Registro exitoso.';
 
+                $mail = new PHPMailer(true);
+
+                try {
+                    // Server settings
+                    $mail->isSMTP();
+                    $mail->Host = MAIL_HOST;  // Specify SMTP server
+                    $mail->SMTPAuth = true;
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable encryption
+                    $mail->Port = 587;
+                    $mail->Username = MAIL_USERNAME;
+                    $mail->Password = MAIL_PASSWORD;
+                    // Recipients
+                    $mail->setFrom(MAIL_SETFROM, MAIL_NOMBRE);
+                    $mail->addAddress($email, $nombre . ' ' . $apellidos);
+                    // Content
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Activar su cuenta en CSIC';
+                    $mail->Body = "
+            <p>Hola $nombre,</p>
+            <p>Gracias por registrarse como usuario en la central de reserva de salas del CSIC</p>
+            <p>Haga click <a href='".CARPETA_VALIDACION."activar_cuenta.php?gestion=$activation_token'>aqu&iacute;</a> para activar su cuenta y poder continuar el proceso de reserva.</p>
+            <p>No responda este correo, si ud. no solicito el registro, por favor desestimelo.</p>";
+
+                    // Send email
+                    $mail->send();
+                    echo 'Registro exitoso. Por favor, revisa tu correo electrónico para activar tu cuenta.';
+                } catch (Exception $e) {
+                    echo 'Registro exitoso, pero no se pudo enviar el correo electrónico. Error: ', $mail->ErrorInfo;
+                }
             } catch (PDOException $e) {
                 // Handle database errors
                 if ($e->getCode() == 23000) {
-                    // Duplicate entry error code
                     $errors[] = 'El correo electrónico ya está registrado.';
                 } else {
                     $errors[] = 'Error en la base de datos: ' . $e->getMessage();
                 }
             }
+
+
 
         }
 

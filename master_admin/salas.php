@@ -77,8 +77,6 @@ $edificios = $csic->traer_edificios();
                                 <button class="btn btn-close p-1" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
                             <div class="modal-body">
-                                <form enctype="multipart/form-data" method="post">
-
                                     <!-- Unidad -->
                                     <div class="mb-3">
                                         <label for="unidad_id" class="form-label">Unidad</label>
@@ -136,7 +134,7 @@ $edificios = $csic->traer_edificios();
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="anillo_magnetico" name="anillo_magnetico" value="1" checked>
-                                            <label class="form-check-label" for="anillo_magnetico">Anillo magnetico</label>
+                                            <label class="form-check-label" for="anillo_magnetico">Campo magnetico</label>
                                         </div>
                                     </fieldset>
 

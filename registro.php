@@ -104,23 +104,6 @@ $secciones = $csic->traer_secciones_csic();
                         <label class="form-label" for="celular">Teléfono móvil</label>
                         <input class="form-control" id="celular" type="text" name="celular"  name="celular"/>
                     </div>
-                    <div class="row g-3 mb-3">
-                        <div class="col-sm-6">
-                            <label class="form-label" for="password">Password</label>
-                            <div class="position-relative" data-password="data-password">
-                                <input class="form-control form-icon-input pe-6" id="password" name="password" type="password" placeholder="Password" data-password-input="data-password-input" />
-                                <button type="button" role="button" class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary" data-password-toggle="data-password-toggle"><span class="uil uil-eye show"></span><span class="uil uil-eye-slash hide"></span></button>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="confirmPassword">Confirmar Password</label>
-                            <div class="position-relative" data-password="data-password">
-                                <input class="form-control form-icon-input pe-6" id="confirmPassword" name="password2"  type="password" placeholder="Confirm Password" data-password-input="data-password-input" />
-                                <button type="button" role="button" class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary" data-password-toggle="data-password-toggle"><span class="uil uil-eye show"></span><span class="uil uil-eye-slash hide"></span></button>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="mb-3 text-start">
                         <label class="form-label" for="usuario_csic">Eres parte del CSIC?</label>
                         <select id="usuario_csic" name="usuario_csic" required class="form-select">
@@ -134,7 +117,7 @@ $secciones = $csic->traer_secciones_csic();
                     <div id="usuario_csic_campos_div" style="display: none">
                         <div class="mb-3 text-start">
                             <label class="form-label" for="departamento">Departamento</label>
-                            <select id="departamento" name="departamento" required class="form-select">
+                            <select id="departamento" name="departamento"  class="form-select">
                                 <option value="">Seleccione</option>
                                 <?php
                                 foreach($departamentos as $departamento){
@@ -145,7 +128,7 @@ $secciones = $csic->traer_secciones_csic();
                         </div>
                         <div class="mb-3 text-start">
                             <label class="form-label" for="unidad">Unidad</label>
-                            <select id="unidad" name="unidad" required class="form-select">
+                            <select id="unidad" name="unidad"  class="form-select">
                                 <option value="">Seleccione</option>
                                 <?php
                                 foreach($unidades as $unidad){
@@ -156,7 +139,7 @@ $secciones = $csic->traer_secciones_csic();
                         </div>
                         <div class="mb-3 text-start">
                             <label class="form-label" for="servicio">Servicio</label>
-                            <select id="servicio" name="servicio" required class="form-select">
+                            <select id="servicio" name="servicio"  class="form-select">
                                 <option value="">Seleccione</option>
                                 <?php
                                 foreach($servicios as $servicio){
@@ -167,7 +150,7 @@ $secciones = $csic->traer_secciones_csic();
                         </div>
                         <div class="mb-3 text-start">
                             <label class="form-label" for="seccion">Sección</label>
-                            <select id="seccion" name="seccion" required class="form-select">
+                            <select id="seccion" name="seccion"  class="form-select">
                                 <option value="">Seleccione</option>
                                 <?php
                                 foreach($secciones as $seccion){
