@@ -1,4 +1,5 @@
 <?php
+
 class Csic
 {
 
@@ -54,6 +55,7 @@ class Csic
             die("Database error: " . $e->getMessage());
         }
     }
+
     public function chequear_usuario()
     {
         try {
@@ -70,12 +72,21 @@ class Csic
             die("Database error: " . $e->getMessage());
         }
     }
+
     public function registra_usuario()
     {
-        if(trim($this->nombre) === ''){ return -1; }
-        if(trim($this->email) === ''){ return -2; }
-        if(trim($this->password) === ''){ return -3; }
-        if($this->password !== $this->password2){ return -4; }
+        if (trim($this->nombre) === '') {
+            return -1;
+        }
+        if (trim($this->email) === '') {
+            return -2;
+        }
+        if (trim($this->password) === '') {
+            return -3;
+        }
+        if ($this->password !== $this->password2) {
+            return -4;
+        }
 
         try {
             $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
@@ -123,6 +134,7 @@ class Csic
             die("Database error: " . $e->getMessage());
         }
     }
+
     public function login_usuario()
     {
         try {
@@ -152,7 +164,7 @@ class Csic
     }
 
 
-    public function  g($email, $password, $nombre, $apellido, $activo = 1, $rol)
+    public function g($email, $password, $nombre, $apellido, $activo = 1, $rol)
     {
         try {
             // Connect to the database
@@ -180,7 +192,6 @@ class Csic
             return false; // Failed to create user
         }
     }
-
 
 
     public function do_this($sql)
@@ -266,7 +277,7 @@ class Csic
             $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt = $con->prepare("UPDATE unidades SET nombre = :nombre WHERE id = :id");
             $stmt->bindParam(":nombre", $this->nombre);
-            $stmt->bindParam(":id", $this->id,PDO::PARAM_INT);
+            $stmt->bindParam(":id", $this->id, PDO::PARAM_INT);
             $stmt->execute();
             return 1;
         } catch (PDOException $e) {
@@ -308,10 +319,10 @@ class Csic
     }
 
 
-    public function generateToken($userId) {
+    public function generateToken($userId)
+    {
         return bin2hex(random_bytes(16)) . '-' . $userId;
     }
-
 
 
     public function nuevo_administrador()
@@ -361,7 +372,7 @@ class Csic
             $stmt->bindParam(":nombre", $this->nombre);
             $stmt->bindParam(":direccion", $this->direccion);
             $stmt->bindParam(":codigo_postal", $this->codigo_postal);
-            $stmt->bindParam(":unidad", $this->unidad_id,PDO::PARAM_INT);
+            $stmt->bindParam(":unidad", $this->unidad_id, PDO::PARAM_INT);
             $stmt->execute();
             return 1;
         } catch (PDOException $e) {
@@ -379,8 +390,8 @@ class Csic
             $stmt->bindParam(":nombre", $this->nombre);
             $stmt->bindParam(":direccion", $this->direccion);
             $stmt->bindParam(":codigo_postal", $this->codigo_postal);
-            $stmt->bindParam(":unidad", $this->unidad_id,PDO::PARAM_INT);
-            $stmt->bindParam(":id", $this->id,PDO::PARAM_INT);
+            $stmt->bindParam(":unidad", $this->unidad_id, PDO::PARAM_INT);
+            $stmt->bindParam(":id", $this->id, PDO::PARAM_INT);
             $stmt->execute();
             return 1;
         } catch (PDOException $e) {
@@ -522,6 +533,7 @@ class Csic
                 $_SESSION["logueado"] = 1;
                 $_SESSION["id"] = $row->id;
                 $_SESSION["nombre"] = $row->nombre;
+                $_SESSION['apellido'] = $row->apellidos;
                 $_SESSION["email"] = $row->email;
                 return 1;
             } else {

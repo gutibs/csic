@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -9,21 +10,13 @@ require 'vendor/autoload.php';
 include("clases/clase_csic.php");
 $csic = new Csic();
 
-echo "<pre>";
-print_r($_POST);
-print_r($_SESSION['csrf_token']);
-var_dump($_POST['usuario_csic']);
 $errors = array();
 
 // Check if the form is submitted via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    // saco la validacion del csrf por ahora
-  //  if (empty($_POST['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-  //      $errors[] = 'Solicitud inválida. Por favor, intente nuevamente.';
-
-    if( 2 === 1){
-
+    if (empty($_POST['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        $errors[] = 'Solicitud inválida. Por favor, intente nuevamente.';
     } else {
         echo "aca";
         // Unset the CSRF token to prevent reuse
@@ -70,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $celular = filter_input(INPUT_POST, 'celular', FILTER_SANITIZE_STRING);
             // Add phone number format validation if necessary
         }
-
 
 
         // Validate 'usuario_csic'
@@ -212,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $mail->Body = "
             <p>Hola $nombre,</p>
             <p>Gracias por registrarse como usuario en la central de reserva de salas del CSIC</p>
-            <p>Haga click <a href='".CARPETA_VALIDACION."activar_cuenta.php?gestion=$activation_token'>aqu&iacute;</a> para activar su cuenta y poder continuar el proceso de reserva.</p>
+            <p>Haga click <a href='" . CARPETA_VALIDACION . "activar_cuenta.php?gestion=$activation_token'>aqu&iacute;</a> para activar su cuenta y poder continuar el proceso de reserva.</p>
             <p>No responda este correo, si ud. no solicito el registro, por favor desestimelo.</p>";
 
                     // Send email
@@ -229,7 +221,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $errors[] = 'Error en la base de datos: ' . $e->getMessage();
                 }
             }
-
 
 
         }

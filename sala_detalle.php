@@ -1,6 +1,8 @@
 <?php
 session_start();
-
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 include("config/config.php");
 include("clases/clase_csic.php");
 $of = new Csic();
@@ -11,7 +13,11 @@ $sala = $of->traer_sala_detalle();
 $sql = "SELECT direccion, codigo_postal FROM edificio WHERE id = " . $sala->edificio_id;
 $dir = $of->get_this_1($sql);
 $direccion = $dir->direccion . " " . $dir->codigo_postal;
-
+/*
+echo "<pre>";
+print_r($_SESSION);
+echo "</pre>";
+*/
 
 ?>
 <!DOCTYPE html>
@@ -45,7 +51,7 @@ $direccion = $dir->direccion . " " . $dir->codigo_postal;
     <link href="template_sitio/assets/css/main.css" rel="stylesheet">
 
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
 
 </head>
 
@@ -60,13 +66,22 @@ $direccion = $dir->direccion . " " . $dir->codigo_postal;
 
         <nav id="navmenu" class="navmenu">
             <ul>
+                <li><a href="index.php">Inicio</a></li>
                 <?php
                 if (isset($_SESSION['logueado']) && $_SESSION['logueado'] === 1) {
                     echo '<li><a href="" class="btn_disponibilidad">Ver disponibilidad</a></li>';
                 }
+                if (isset($_SESSION['logueado']) && $_SESSION['logueado'] === 1) {
+                    echo '<li><a href="usuario/index.php">Mis Gestiones</a></li>';
+                } else {
+                    echo '<li><a href="index.php#ingreso">Ingreso</a></li>';
+                }
+                if (isset($_SESSION['logueado']) && $_SESSION['logueado'] === 1) {
+                    echo '<li><a href="logout.php">Salir</a></li>';
+                }
                 ?>
 
-                <li><a href="index.php">Inicio</a></li>
+
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -76,7 +91,7 @@ $direccion = $dir->direccion . " " . $dir->codigo_postal;
 <main class="main">
     <div class="page-title dark-background">
         <div class="container position-relative">
-            <h1><?php echo $sala->nombre_sala . " <small>(" . $sala->numero_sala . ")</small>"; ?></h1>
+            <h1><?php echo $sala->nombre_sala; ?></h1>
         </div>
     </div>
     <section id="portfolio-details" class="portfolio-details section">
@@ -165,7 +180,8 @@ $direccion = $dir->direccion . " " . $dir->codigo_postal;
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form method="post" action="solicitar_sala.php">
+                <form id="solicitarSalaForm" method="post">
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <input name="sala" type="hidden" value="<?php echo $sala->id; ?>">
                     <div class="modal-header">
                         <h5 class="modal-title" id="verticallyCenteredModalLabel">Solicitar Sala</h5>
@@ -173,27 +189,31 @@ $direccion = $dir->direccion . " " . $dir->codigo_postal;
                                 aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Unidad -->
-                        <div class="mb-3">
-                            <label for="daterange" class="form-label">Fecha deseada</label>
-                            <input type="text" class="form-control" id="daterange" name="nombre_sala" value="">
-                        </div>
-                        <!-- Número de Sala -->
-                        <div class="mb-3">
-                            <label for="numero_participantes" class="form-label">Número de Participantes</label>
-                            <input type="number" min="1" step="1" class="form-control" id="numero_participantes" required name="numero_participantes" value="">
-                        </div>
-                        <!-- Capacidad -->
-                        <div class="mb-3">
-                            <label for="comentarios" class="form-label">Comentarios</label>
-                            <textarea class="form-control" id="comentarios" name="comentarios" cols="15"></textarea>
+                        <div id="responseMessage" style="display:none;" class="alert"></div> <!-- Response Message -->
+                        <div class="formContent"> <!-- Wrapper for the form fields -->
+                            <div class="mb-3">
+                                <label for="daterange" class="form-label">Fecha deseada</label>
+                                <input type="text" class="form-control" id="daterange" name="nombre_sala" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label for="numero_participantes" class="form-label">Número de Participantes</label>
+                                <input type="number" min="1" step="1" class="form-control" id="numero_participantes"
+                                       required name="numero_participantes" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label for="comentarios" class="form-label">Comentarios</label>
+                                <textarea class="form-control" id="comentarios" name="comentarios" cols="15"></textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit">Solicitar</button>
-                        <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary formContent" type="button" id="submitSolicitud">Solicitar
+                        </button>
+                        <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
+
+
             </div>
 
         </div>
@@ -243,7 +263,7 @@ $direccion = $dir->direccion . " " . $dir->codigo_postal;
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         $('#daterange').daterangepicker({
             opens: 'right',
             locale: {
@@ -262,7 +282,7 @@ $direccion = $dir->direccion . " " . $dir->codigo_postal;
                 firstDay: 1 // Start the week on Monday
             },
             minDate: moment() // Prevent selecting past dates
-        }, function(start, end) {
+        }, function (start, end) {
             console.log("Rango seleccionado: " + start.format('DD-MM-YYYY') + ' a ' + end.format('DD-MM-YYYY'));
         });
     });
@@ -271,6 +291,67 @@ $direccion = $dir->direccion . " " . $dir->codigo_postal;
         e.preventDefault()
         $("#modal_solicita_sala").modal('show')
     })
+
+
+    $(document).ready(function () {
+        $('#submitSolicitud').on('click', function (e) {
+            e.preventDefault();
+
+            const formData = $('#solicitarSalaForm').serialize(); // Serialize form data
+
+            $.ajax({
+                url: 'reserva_sala_proceso.php', // PHP handler
+                type: 'POST',
+                data: formData,
+                dataType: 'json', // Expect JSON response
+                success: function (response) {
+                    const responseDiv = $('#responseMessage');
+                    if (response.success) {
+                        // Show success message
+                        responseDiv
+                            .removeClass('alert-danger')
+                            .addClass('alert alert-success')
+                            .html(response.message)
+                            .show();
+
+                        // Hide form content
+                        $('.formContent').hide();
+                    } else {
+                        // Show error message
+                        responseDiv
+                            .removeClass('alert-success')
+                            .addClass('alert alert-danger')
+                            .html(response.message)
+                            .show();
+                    }
+                },
+                error: function (e) {
+                    console.log(e)
+                    const responseDiv = $('#responseMessage');
+                    responseDiv
+                        .removeClass('alert-success')
+                        .addClass('alert alert-danger')
+                        .html('Ocurrió un error al procesar la solicitud.')
+                        .show();
+                }
+            });
+
+
+        });
+
+        $('#solicitarSalaForm').closest('.modal').on('hidden.bs.modal', function () {
+            // Reset form fields
+            $('#solicitarSalaForm')[0].reset();
+
+            // Reset the response message and hide it
+            $('#responseMessage').hide().removeClass('alert-success alert-danger').html('');
+
+            // Show the form content again
+            $('#formContent').show();
+        });
+    });
+
+
 </script>
 </body>
 

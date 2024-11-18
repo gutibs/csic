@@ -3,52 +3,38 @@ session_start();
 include("config/config.php");
 include("clases/clase_csic.php");
 $of = new Csic();
-
-
-
-/*
- Array
-(
-    [csrf_token] => 135863509fca7516e2917e21c2501199bd6beed4b99b060d55b9fbc1a7a6b051
-    [reservante_completo] =>
-    [email] => gutibs@gmail.com
-    [password] => putaMierda2024!
-)
-
- */
-
-
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-        $errors['csrf'] = "CSRF token invalido.";
+        $errors[] = "CSRF token invalido.";
     }
     if (empty($_POST['email'])) {
-        $errors['email'] = "Correo electrónico es requerido.";
+        $errors[] = "Correo electrónico es requerido.";
     } else {
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = "Correo electrónico no es válido.";
+            $errors[] = "Correo electrónico no es válido.";
         }
     }
     if (empty($_POST['password'])) {
-        $errors['password'] = "Clave es requerida.";
+        $errors[] = "Clave es requerida.";
     } else {
         $password = $_POST['password'];
     }
 
     if (!empty($_POST['reservante_completo'])) {
-        $errors['honey'] = "Gracias.";
+        $errors[] = "Gracias.";
     }
 
     if (empty($errors)) {
         $of->storeFormValues($_POST);
         $usuario = $of->login_reservante();
-        if($usuario === 1) {
+        if ($usuario === 1) {
             header("Location: index.php");
         } else {
-            $_SESSION['login_errors'] = "Algun error";
+            $errors[] = "Algun error";
+            $_SESSION['login_errors'] = $errors;
             header("Location: index.php#ingreso");
         }
     } else {

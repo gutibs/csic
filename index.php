@@ -28,11 +28,11 @@ foreach ($ci as $v) {
         $carro[] = $v->imagen5;
     }
 }
-if($carro) {
+if ($carro) {
     shuffle($carro);
-$carro = array_slice($carro, 0, 10);
-$randomKey = array_rand($carro);
-$randomValue = $carro[$randomKey];
+    $carro = array_slice($carro, 0, 10);
+    $randomKey = array_rand($carro);
+    $randomValue = $carro[$randomKey];
 }
 $sql = "SELECT id, nombre_sala as nombre FROM salas WHERE 1 ORDER BY nombre_sala";
 $cs = $csic->get_this_all($sql);
@@ -78,11 +78,13 @@ $cs = $csic->get_this_all($sql);
             align-items: center;
             text-align: center;
         }
+
         .custom-center h2, .custom-center span {
             width: 100%;
             text-align: center;
             margin: 0;
         }
+
         .accordion-button {
             background-color: inherit !important;
             color: inherit !important;
@@ -112,18 +114,15 @@ $cs = $csic->get_this_all($sql);
                 <li><a href="#hero" class="active">Inicio</a></li>
                 <li><a href="#portfolio">Salas</a></li>
                 <?php
-                if(isset($_SESSION['logueado']) && $_SESSION['logueado'] === 1){
+                if (isset($_SESSION['logueado']) && $_SESSION['logueado'] === 1) {
                     echo '<li><a href="#contacto">Contacto</a></li>';
                     echo '<li><a href="usuario/index.php">Mis Gestiones</a></li>';
                 } else {
                     echo '<li><a href="#ingreso">Ingreso</a></li>';
                     echo '<li><a href="#contacto">Contacto</a></li>';
                 }
-                ?>
-
-                <?php
-                if(isset($_SESSION['logueado']) && $_SESSION['logueado'] === 1){
-                echo '<li><a href="logout.php">Salir</a></li>';
+                if (isset($_SESSION['logueado']) && $_SESSION['logueado'] === 1) {
+                    echo '<li><a href="logout.php">Salir</a></li>';
                 }
                 ?>
             </ul>
@@ -163,7 +162,9 @@ $cs = $csic->get_this_all($sql);
             <?php
             $sql = "SELECT * FROM unidades WHERE 1 ORDER BY nombre";
             $cs = $csic->get_this_all($sql);
-            foreach ($cs as $c => $v){
+            foreach ($cs
+
+            as $c => $v){
 
             // saco las imagenes
             $ima = "SELECT id, imagen1, imagen2, imagen3, imagen4, imagen5 FROM salas WHERE unidad_id = $v->id";
@@ -183,7 +184,8 @@ $cs = $csic->get_this_all($sql);
                             <?php
                             }
                             ?>
-                            <button class="accordion-button text-center custom-center" type="button" data-bs-toggle="collapse"
+                            <button class="accordion-button text-center custom-center" type="button"
+                                    data-bs-toggle="collapse"
                                     data-bs-target="#collapse<?php echo $c; ?>" aria-expanded="true"
                                     aria-controls="collapse<?php echo $c; ?>">
                                 <span class="text-center w-100"><h3><?php echo $v->nombre; ?></h3></span>
@@ -193,81 +195,89 @@ $cs = $csic->get_this_all($sql);
                              aria-labelledby="heading<?php echo $c; ?>" data-bs-parent="#accordionExample">
                             <div class="accordion-body pt-0">
                                 <div class="row mt-3">
-                                <?php
-                                foreach($ci as $cada => $sala){
-                                    if(!is_null($sala->imagen1)){
-                                    ?>
+                                    <?php
+                                    foreach ($ci as $cada => $sala) {
+                                        if (!is_null($sala->imagen1)) {
+                                            ?>
 
-                                <div class="col-3 ">
-                                <div class="portfolio-content ">
-                                    <img src="static/imagenes/salas/<?php echo $sala->imagen1; ?>"
-                                         class="img-fluid" alt="">
-                                    <div class="portfolio-info">
-                                        <a href="static/imagenes/salas/<?php echo $sala->imagen1; ?>"
-                                           data-gallery="portfolio-gallery-book" class="glightbox preview-link"><i
-                                                    class="bi bi-zoom-in"></i></a>
-                                        <a href="sala_detalle.php?sala_id=<?php echo $sala->id; ?>" title="Ver"
-                                           class="details-link"><i class="bi bi-link-45deg"></i></a>
-                                    </div>
-                                </div>
-                                </div>
-                                        <?php
+                                            <div class="col-3 ">
+                                                <div class="portfolio-content ">
+                                                    <img src="static/imagenes/salas/<?php echo $sala->imagen1; ?>"
+                                                         class="img-fluid" alt="">
+                                                    <div class="portfolio-info">
+                                                        <a href="static/imagenes/salas/<?php echo $sala->imagen1; ?>"
+                                                           data-gallery="portfolio-gallery-book"
+                                                           class="glightbox preview-link"><i
+                                                                    class="bi bi-zoom-in"></i></a>
+                                                        <a href="sala_detalle.php?sala_id=<?php echo $sala->id; ?>"
+                                                           title="Ver"
+                                                           class="details-link"><i class="bi bi-link-45deg"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                        if (!is_null($sala->imagen2)) {
+                                            ?>
+                                            <div class="col-3">
+                                                <div class="portfolio-content ">
+                                                    <img src="static/imagenes/salas/<?php echo $sala->imagen2; ?>"
+                                                         class="img-fluid" alt="">
+                                                    <div class="portfolio-info">
+                                                        <a href="static/imagenes/salas/<?php echo $sala->imagen2; ?>"
+                                                           data-gallery="portfolio-gallery-book"
+                                                           class="glightbox preview-link"><i
+                                                                    class="bi bi-zoom-in"></i></a>
+                                                        <a href="sala_detalle.php?sala_id=<?php echo $sala->id; ?>"
+                                                           title="Ver"
+                                                           class="details-link"><i class="bi bi-link-45deg"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                        if (!is_null($sala->imagen3)) {
+                                            ?>
+                                            <div class="col-3">
+                                                <div class="portfolio-content ">
+                                                    <img src="static/imagenes/salas/<?php echo $sala->imagen3; ?>"
+                                                         class="img-fluid" alt="">
+                                                    <div class="portfolio-info">
+                                                        <a href="static/imagenes/salas/<?php echo $sala->imagen3; ?>"
+                                                           data-gallery="portfolio-gallery-book"
+                                                           class="glightbox preview-link"><i
+                                                                    class="bi bi-zoom-in"></i></a>
+                                                        <a href="sala_detalle.php?sala_id=<?php echo $sala->id; ?>"
+                                                           title="Ver"
+                                                           class="details-link"><i class="bi bi-link-45deg"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                        if (!is_null($sala->imagen4)) {
+                                            ?>
+                                            <div class="col-3">
+                                                <div class="portfolio-content ">
+                                                    <img src="static/imagenes/salas/<?php echo $sala->imagen4; ?>"
+                                                         class="img-fluid" alt="">
+                                                    <div class="portfolio-info">
+                                                        <a href="static/imagenes/salas/<?php echo $sala->imagen4; ?>"
+                                                           data-gallery="portfolio-gallery-book"
+                                                           class="glightbox preview-link"><i
+                                                                    class="bi bi-zoom-in"></i></a>
+                                                        <a href="sala_detalle.php?sala_id=<?php echo $sala->id; ?>"
+                                                           title="Ver"
+                                                           class="details-link"><i class="bi bi-link-45deg"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <?php
+                                        }
                                     }
-                                if(!is_null($sala->imagen2)){
-                                        ?>
-                                <div class="col-3">
-                                    <div class="portfolio-content ">
-                                        <img src="static/imagenes/salas/<?php echo $sala->imagen2; ?>"
-                                             class="img-fluid" alt="">
-                                        <div class="portfolio-info">
-                                            <a href="static/imagenes/salas/<?php echo $sala->imagen2; ?>"
-                                               data-gallery="portfolio-gallery-book" class="glightbox preview-link"><i
-                                                        class="bi bi-zoom-in"></i></a>
-                                            <a href="sala_detalle.php?sala_id=<?php echo $sala->id; ?>" title="Ver"
-                                               class="details-link"><i class="bi bi-link-45deg"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                    <?php
-                                }
-                                if(!is_null($sala->imagen3)){
                                     ?>
-                                <div class="col-3">
-                                    <div class="portfolio-content ">
-                                        <img src="static/imagenes/salas/<?php echo $sala->imagen3; ?>"
-                                             class="img-fluid" alt="">
-                                        <div class="portfolio-info">
-                                            <a href="static/imagenes/salas/<?php echo $sala->imagen3; ?>"
-                                               data-gallery="portfolio-gallery-book" class="glightbox preview-link"><i
-                                                        class="bi bi-zoom-in"></i></a>
-                                            <a href="sala_detalle.php?sala_id=<?php echo $sala->id; ?>" title="Ver"
-                                               class="details-link"><i class="bi bi-link-45deg"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                    <?php
-                                }
-                                if(!is_null($sala->imagen4)){
-                                    ?>
-                                <div class="col-3">
-                                    <div class="portfolio-content ">
-                                        <img src="static/imagenes/salas/<?php echo $sala->imagen4; ?>"
-                                             class="img-fluid" alt="">
-                                        <div class="portfolio-info">
-                                            <a href="static/imagenes/salas/<?php echo $sala->imagen4; ?>"
-                                               data-gallery="portfolio-gallery-book" class="glightbox preview-link"><i
-                                                        class="bi bi-zoom-in"></i></a>
-                                            <a href="sala_detalle.php?sala_id=<?php echo $sala->id; ?>" title="Ver"
-                                               class="details-link"><i class="bi bi-link-45deg"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <?php
-                                }
-                                }
-                                ?>
                                 </div>
                             </div>
                         </div>
@@ -278,78 +288,87 @@ $cs = $csic->get_this_all($sql);
             </div>
 
 
-
-
     </section><!-- /Portfolio Section -->
 
 
     <?php
-    if(!isset($_SESSION['logueado']) || $_SESSION['logueado'] !== 1){
+    if (!isset($_SESSION['logueado']) || $_SESSION['logueado'] !== 1) {
         ?>
 
 
-
-    <!-- Ingreso Section -->
-    <section id="ingreso" class="ingreso section">
+        <!-- Ingreso Section -->
+        <section id="ingreso" class="ingreso section">
             <div class="row">
                 <div class="col-3">
                     &nbsp;
                 </div>
                 <div class="col-6 ">
                     <!-- Section Title -->
-                    <div class="container section-title" data-aos="fade-up">
-                        <span class="description-title">Ingresar</span>
-                        <h2>Ingresar</h2>
-                        <p>Si ya tiene un usuario creado.</p>
-                        <p>Ó haz click <a href="registro.php">Aquí</a> para generar un usuario </p>
-                    </div><!-- End Section Title -->
-                    <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-                        <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
-                            <form id="loginForm" action="login.php" method="POST">
-                                <!-- CSRF Token -->
-                                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                <input type="text" name="reservante_completo" style="display:none;" tabindex="-1">
-                                <div class="mb-3 text-start form-group" id="email-group">
-                                    <label class="form-label" for="email">Correo Electrónico</label>
-                                    <div class="form-icon-container">
-                                        <input class="form-control form-icon-input" id="email" name="email" type="email"
-                                               placeholder="nombre@ejemplo.com" required/>
-                                        <span class="fas fa-user text-body fs-9 form-icon"></span>
-                                    </div>
-                                    <span class="error-message text-danger" id="email-error"></span>
+                    <div class="container section-title" data-aos="fade-up"
+                    <span class="description-title">Ingresar</span>
+                    <h2>Ingresar</h2>
+                    <p>Si ya tiene un usuario creado.</p>
+                    <p>Ó haz click <a href="registro.php">Aquí</a> para generar un usuario </p>
+                </div><!-- End Section Title -->
+                <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
+                    <?php
+                    if (isset($_SESSION['login_errors'])) {
+                        foreach ($_SESSION['login_errors'] as $error) {
+                            ?>
+                            <div class="row gy-4">
+                                <div class="col">
+                                    <p class="text-danger"><?php echo $error; ?></p>
                                 </div>
-
-                                <div class="mb-3 text-start form-group" id="password-group">
-                                    <label class="form-label" for="password">Clave</label>
-                                    <div class="form-icon-container position-relative" data-password="data-password">
-                                        <input class="form-control form-icon-input pe-6" id="password" name="password"
-                                               type="password" placeholder="Clave" data-password-input="data-password-input"
-                                               required/>
-                                        <span class="fas fa-key text-body fs-9 form-icon"></span>
-                                        <button type="button"
-                                                class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
-                                                data-password-toggle="data-password-toggle">
-                                            <span class="uil uil-eye show"></span>
-                                            <span class="uil uil-eye-slash hide"></span>
-                                        </button>
-                                    </div>
-                                    <span class="error-message text-danger" id="password-error"></span>
-                                </div>
-
-
-                                <button type="submit" class="btn btn-primary w-100 mb-3" id="btn_ingreso">Ingresar</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="mt-5" style="height:75px">&nbsp;</div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    unset($_SESSION['login_errors']);
+                    ?>
                 </div>
+                <div class="row gy-4">
+                    <form id="loginForm" action="login.php" method="POST">
+                        <!-- CSRF Token -->
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                        <input type="text" name="reservante_completo" style="display:none;" tabindex="-1">
+                        <div class="mb-3 text-start form-group" id="email-group">
+                            <label class="form-label" for="email">Correo Electrónico</label>
+                            <div class="form-icon-container">
+                                <input class="form-control form-icon-input" id="email" name="email" type="email"
+                                       placeholder="nombre@ejemplo.com" required/>
+                                <span class="fas fa-user text-body fs-9 form-icon"></span>
+                            </div>
+                            <span class="error-message text-danger" id="email-error"></span>
+                        </div>
+
+                        <div class="mb-3 text-start form-group" id="password-group">
+                            <label class="form-label" for="password">Clave</label>
+                            <div class="form-icon-container position-relative" data-password="data-password">
+                                <input class="form-control form-icon-input pe-6" id="password" name="password"
+                                       type="password" placeholder="Clave" data-password-input="data-password-input"
+                                       required/>
+                                <span class="fas fa-key text-body fs-9 form-icon"></span>
+                                <button type="button"
+                                        class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
+                                        data-password-toggle="data-password-toggle">
+                                    <span class="uil uil-eye show"></span>
+                                    <span class="uil uil-eye-slash hide"></span>
+                                </button>
+                            </div>
+                            <span class="error-message text-danger" id="password-error"></span>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary w-100 mb-3" id="btn_ingreso">Ingresar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="mt-5" style="height:75px">&nbsp;</div>
+            </div>
             </div>
 
 
-
-
-    </section><!-- /ingreso Section -->
+        </section><!-- /ingreso Section -->
 
 
         <?php
