@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("config/config.php");
-include("clases/clase_csic.php");
+include("../config/config.php");
+include("../clases/clase_csic.php");
 $of = new Csic();
 
 $errors = [];
@@ -30,27 +30,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usuario = $of->login_usuario();
 
 
+
+
         if($usuario === 1) {
             switch ((int)$_SESSION["rol"]) {
                 case 1:
-                    header("Location: master_admin/dashboard.php"); // Redirect to a protected page (e.g., dashboard)
+                    header("Location: ../master_admin/dashboard.php"); // Redirect to a protected page (e.g., dashboard)
                     exit;
                 case 2:
-                    header("Location: administrador/dashboard.php"); // Redirect for role 2
+                    header("Location: ../administrador/dashboard.php"); // Redirect for role 2
                     exit;
                 case 3:
-                    header("Location: guest_dashboard.php"); // Redirect for role 3
+                    header("Location: ../guest_dashboard.php"); // Redirect for role 3
                     exit;
                 default:
-                    header("Location: error.php"); // Redirect for undefined roles
+                    header("Location: ../error.php"); // Redirect for undefined roles
                     exit;
             }
         } else {
             $_SESSION['login_errors'] = "Algun error";
-            header("Location: index.php#ingreso");
+            header("Location: index.php");
         }
     } else {
         $_SESSION['login_errors'] = $errors;
-        header("Location: index.php#ingreso");
+        header("Location: index.php");
     }
 }

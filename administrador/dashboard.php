@@ -26,13 +26,10 @@ $csic = new Csic();
                     <h5 class="text-body-tertiary fw-semibold">Desde aquí administrará las distintas secciones.</h5>
                 </div>
             </div>
-
             <div class="row mb-3 gy-6">
                 <?php
                 include("barra_informativa.php");
                 ?>
-
-
             </div>
 
 
